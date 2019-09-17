@@ -1,9 +1,9 @@
 /*
     Homework for the University, using arrays and CRUD operations
-    Author: Gustavo Melhorança Cardoso 
+    Author: Gustavo Melhorança Cardoso
 */
 
-// Estruturas
+// Structures
 #[derive(Debug)]
 struct Book {
     title: String,
@@ -11,11 +11,11 @@ struct Book {
     rented: bool
 }
 
-#[derive(Debug)]
-enum BookEnum {
-    Title(String),
-    Author(String),
-    Rented(bool)
+impl Book {
+    fn new() -> Book {
+        let n = Book {title: String::from(""), author: String::from(""), rented: false};
+        n
+    }
 }
 
 
@@ -24,38 +24,38 @@ fn main() {
 
     // Array of books
     let mut all_books: Vec<Book> = Vec::new();
-    let mut all_booksEnum: Vec<BookEnum> = Vec::new();
 
     // Option for the user
     let mut option = String::new();
 
-    
+    // Counter for all the books in store
+    let mut book_counter: u8 = 0;
+
+
     loop {
         // Present menu to user
         menu();
         println!("Insert your option: ");
+        // Clear the input buffer
+        option.clear();
+
         std::io::stdin().read_line(&mut option)
              .expect("Failed to read line");
 
-        
+        // if let 3 = str_to_u32(&mut option) {
+        //     println!("Three");
+        // } else {
+        //     break;
+        // }
+        //println!("Your option is: {}", option);
+        let option_int: u32 = str_to_u32(&mut option);
 
-        match str_to_u32(&mut option) {
+
+        match option_int {
+            0 => break,
             1 => {
                 // Create a new book and get the data from the user
-                let mut new_book = Book {title: String::from(""), author: String::from(""), rented: false}; 
-
-                println!("Input title: ");
-                let mut input_title = String::new();
-                std::io::stdin().read_line(&mut input_title)
-                    .expect("Failed to read line");
-                
-                new_book.title = input_title;
-                
-                let mut input_author = String::new();
-                std::io::stdin().read_line(&mut input_author)
-                    .expect("Failed to read line"); 
-
-                new_book.author = input_author;   
+                let new_book = get_book_data();
 
                 // Add book to the vector
                 all_books.push(new_book);
@@ -66,16 +66,14 @@ fn main() {
             },
             3 => {
                 // List all books
-                for books in all_books.iter() {
-                    match books {
-                        _ => println!("Book: {:?}", books)
-                    }
+                for book in &all_books {
+                    println!("{:?}", book);
                 }
-                break;
+
             }
             255 => {
                 println!("Parsing error");
-                break;
+
             },
             _ => {
                 println!("Anything else");
@@ -96,12 +94,22 @@ fn menu(){
     println!("3 - List all books ");
     println!("4 - Update info from a book ");
     println!("5 - Search a book ");
+    println!("0 - Exit ");
 
 }
 
 // Function to get user's data for a new book
-fn get_book_data(_title: String, _author: String) {
+fn get_book_data() -> Book {
+    let mut new = Book::new();
     println!("Input the book's title: ");
+    std::io::stdin().read_line(&mut new.title)
+        .expect("Could not read title");
+
+    println!("Input the book's author: ");
+    std::io::stdin().read_line(&mut new.author)
+        .expect("Could not read author");
+
+    new
 }
 
 // Function to convert string to u32
@@ -109,7 +117,7 @@ fn str_to_u32(str_to_convert: &mut String) -> u32 {
     let str_to_convert: u32 = match str_to_convert.trim().parse() {
         Ok(number) => number,
         Err(_) => {
-            println!("Error to convert!");
+            println!("str_to_u32 error");
             255
         }
     };
@@ -117,5 +125,4 @@ fn str_to_u32(str_to_convert: &mut String) -> u32 {
 }
 
 
-
-
+// Function to
