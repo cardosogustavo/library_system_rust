@@ -8,12 +8,13 @@
 struct Book {
     title: String,
     author: String,
+    id_number: i32,
     rented: bool
 }
 
 impl Book {
-    fn new() -> Book {
-        let n = Book {title: String::from(""), author: String::from(""), rented: false};
+    fn new(id: i32) -> Book {
+        let n = Book {title: String::from(""), author: String::from(""), id_number: id, rented: false};
         n
     }
 }
@@ -29,7 +30,7 @@ fn main() {
     let mut option = String::new();
 
     // Counter for all the books in store
-    let mut book_counter: u8 = 0;
+    let mut book_counter: i32 = 0;
 
     
     loop {
@@ -42,20 +43,15 @@ fn main() {
         std::io::stdin().read_line(&mut option)
              .expect("Failed to read line");
 
-        // if let 3 = str_to_u32(&mut option) {
-        //     println!("Three");
-        // } else {
-        //     break;
-        // }
-        //println!("Your option is: {}", option);
         let option_int: u32 = str_to_u32(&mut option);
         
 
         match option_int {
             0 => break,
             1 => {
+                book_counter += 1;
                 // Create a new book and get the data from the user
-                let new_book = get_book_data();
+                let new_book = get_book_data(book_counter);
 
                 // Add book to the vector
                 all_books.push(new_book);
@@ -70,7 +66,18 @@ fn main() {
                     println!("{:?}", book);
                 }
                 
-            }
+            },
+            4 => {
+                break;
+            },
+            5 => {
+                let mut input_id = String::new();
+                println!("Enter the id of the book: ");
+                
+                std::io::stdin().read_line(&mut input_id)
+                    .expect("Could not read id");
+
+            },
             255 => {
                 println!("Parsing error");
                 
@@ -99,8 +106,8 @@ fn menu(){
 }
 
 // Function to get user's data for a new book
-fn get_book_data() -> Book {
-    let mut new = Book::new();
+fn get_book_data(id: i32) -> Book {
+    let mut new = Book::new(id);
     println!("Input the book's title: ");
     std::io::stdin().read_line(&mut new.title)
         .expect("Could not read title");
