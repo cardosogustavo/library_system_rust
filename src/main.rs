@@ -77,6 +77,12 @@ fn main() {
                 std::io::stdin().read_line(&mut input_id)
                     .expect("Could not read id");
 
+                let input_id_int = str_to_usize(&mut input_id);
+
+                if all_books.get(input_id_int) {
+
+                }
+
             },
             255 => {
                 println!("Parsing error");
@@ -132,7 +138,17 @@ fn str_to_u32(str_to_convert: &mut String) -> u32 {
 }
 
 
-// Function to
+// Function to convert string to usize
+fn str_to_usize(str_to_convert: &mut String) -> usize {
+    let str_to_convert: usize = match str_to_convert.trim().parse() {
+        Ok(number) => number,
+        Err(_) => {
+            println!("str_to_usize error");
+            255
+        }
+    };
+    str_to_convert
+}
 
 
 
